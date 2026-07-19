@@ -97,18 +97,39 @@ const columns: TableColumn<Payment>[] = [
     }
   },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
-    meta: {
-      class: {
-        th: 'text-right font-bold text-primary',
-        td: 'text-right font-mono'
-      }
-    },
+    accessorKey: 'update Button',
+    header: '',
     cell: ({ row }) => {
-      const amount = Number.parseFloat(row.getValue('amount'))
-      const formatted = new Intl.NumberFormat().format(amount)
-      return h('span', { class: 'font-semibold text-success' }, formatted)
+      return h(
+        'button',
+        {
+          class: 'bg-blue-500 text-white p-2 rounded',
+          onClick: () => {
+            const id = row.getValue('id')
+            navigateTo(`/insert`) // Redirect to the update page with the ID
+            console.log(`Update button clicked for ID: ${id}`)
+          }
+        },
+        'Update'
+      )
+    }
+  },
+  {
+    accessorKey: 'delete Button',
+    header: '',
+    cell: ({ row }) => {
+      return h(
+        'button',
+        {
+          class: 'bg-red-500 text-white m-0 p-2 rounded',
+          onClick: () => {
+            const id = row.getValue('id')
+
+            console.log(`Delete button clicked for ID: ${id}`)
+          }
+        },
+        'Delete'
+      )
     }
   }
 ]
@@ -129,5 +150,6 @@ const meta: TableMeta<Payment> = {
 </script>
 
 <template>
-  <UTable :data="data" :columns="columns" :meta="meta" class="flex-1 " />
+  <UTable :data="data" :columns="columns" :meta="meta" class="flex-1 ">
+  </UTable>
 </template>
