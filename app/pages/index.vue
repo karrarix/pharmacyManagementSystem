@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import Buttons from './componant/buttons.vue';
+import Nevbar from './componant/nevbar.vue';
   import Table from './componant/table.vue';
         
     useHead({
@@ -12,10 +13,7 @@
 
 <template>
     <div class="flex flex-col h-full gap-4 border border-blue-500 rounded-lg p-4 m-10">
-        <Table/>
-        <div class="flex flex-row  gap-4 p-4 m-10">    
-        <NuxtLink to="/import" class=" p-2 "><Buttons label="add" color="bg-blue-500 hover:bg-blue-600"></Buttons></NuxtLink>
-        <NuxtLink to="/export" class=" p-2 "><Buttons label="bying" color="bg-green-500 hover:bg-green-600"></Buttons></NuxtLink>
-        </div>
+      <Nevbar></Nevbar>  
+      <Table/>
     </div>
 </template>

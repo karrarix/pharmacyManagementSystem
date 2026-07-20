@@ -8,6 +8,7 @@ type Payment = {
   status: 'good' | 'near end' | 'out of stock'
   instock: number
   amount: number
+  minimumAmount: number
 }
 
 const data = ref<Payment[]>([
@@ -16,35 +17,40 @@ const data = ref<Payment[]>([
     name: 'Product A',
     status: 'good',
     instock: 10,
-    amount: 594
+    amount: 594,
+    minimumAmount: 5
   },
   {
     id: '4599',
     name: 'Product B',
     status: 'near end',
     instock: 5,
-    amount: 276
+    amount: 276,
+    minimumAmount: 10 
   },
   {
     id: '4598',
     name: 'Product C',
     status: 'out of stock',
     instock: 0,
-    amount: 315
+    amount: 315,
+    minimumAmount: 15
   },
   {
     id: '4597',
     name: 'Product D',
     status: 'good',
     instock: 10,
-    amount: 529
+    amount: 529,
+    minimumAmount: 5
   },
   {
     id: '4596',
     name: 'Product E',
     status: 'good',
     instock: 5,
-    amount: 639
+    amount: 639,
+    minimumAmount: 5
   }
 ])
 
@@ -97,17 +103,26 @@ const columns: TableColumn<Payment>[] = [
     }
   },
   {
+    accessorKey:'minimumAmount',
+    header:'Minimum amount',
+    meta:{
+      class:{
+        th:'text-center',
+        td:'text-center'
+      }
+    }
+  },
+  {
     accessorKey: 'update Button',
     header: '',
     cell: ({ row }) => {
       return h(
         'button',
         {
-          class: 'bg-blue-500 text-white p-2 rounded',
+          class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 cursor-pointer',
           onClick: () => {
             const id = row.getValue('id')
             navigateTo(`/insert`) // Redirect to the update page with the ID
-            console.log(`Update button clicked for ID: ${id}`)
           }
         },
         'Update'
@@ -121,7 +136,7 @@ const columns: TableColumn<Payment>[] = [
       return h(
         'button',
         {
-          class: 'bg-red-500 text-white m-0 p-2 rounded',
+          class: 'bg-red-500 text-white m-0 p-2 rounded hover:bg-red-600 cursor-pointer',
           onClick: () => {
             const id = row.getValue('id')
 
