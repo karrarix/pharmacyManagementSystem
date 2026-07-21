@@ -17,7 +17,7 @@ defineProps({
 
 
 <template>
-  <UButton loading-auto @click="onClick" :class="['${{color}} text-white p-2 rounded', color]">
+  <UButton loading-auto @click="onClick" :class="['${{color}} text-white p-2 rounded justify-center', color]">
     <slot>{{ label }}</slot>
   </UButton>
 </template>

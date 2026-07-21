@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-  import Buttons from './componant/buttons.vue';
 import Nevbar from './componant/nevbar.vue';
   import Table from './componant/table.vue';
         
@@ -12,8 +11,8 @@ import Nevbar from './componant/nevbar.vue';
 </script>
 
 <template>
-    <div class="flex flex-col h-full gap-4 border border-blue-500 rounded-lg p-4 m-10">
+    <div class="flex flex-col h-full gap-4 border border-blue-600  rounded-lg p-4 m-10 mx-50 dark:border-green-500 ">
       <Nevbar></Nevbar>  
       <Table/>
-    </div>
+   </div>
 </template>

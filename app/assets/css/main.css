@@ -3,7 +3,14 @@
 @theme {
   --font-sans: 'Public Sans', sans-serif;
 }
-@layer base{ body {
-@apply bg-slate-900
+
+
+body {
+  @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white;
 }
+div {
+  @apply  border-blue-500 dark:border-green-500 ;
+}
+container {
+  @apply flex flex-col h-full gap-4 border border-blue-500 rounded-lg p-4 m-10 dark:border-red-900;
 }

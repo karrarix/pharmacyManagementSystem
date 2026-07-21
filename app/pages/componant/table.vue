@@ -134,9 +134,9 @@ const columns: TableColumn<Payment>[] = [
     header: '',
     cell: ({ row }) => {
       return h(
-        'button',
+        'Ubutton',
         {
-          class: 'bg-red-500 text-white m-0 p-2 rounded hover:bg-red-600 cursor-pointer',
+          class: 'bg-red-500 text-white m-0 p-2 rounded border border-red-600 hover:bg-red-600 cursor-pointer',
           onClick: () => {
             const id = row.getValue('id')
 
