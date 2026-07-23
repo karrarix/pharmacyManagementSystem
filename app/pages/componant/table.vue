@@ -11,6 +11,8 @@ type Payment = {
   minimumAmount: number
 }
 
+
+
 const data = ref<Payment[]>([
   {
     id: '4600',
@@ -144,6 +146,24 @@ const columns: TableColumn<Payment>[] = [
           }
         },
         'Delete'
+      )
+    }
+  },
+  {
+    accessorKey: 'export Button',
+    header: '',
+    cell: ({ row }) => {
+      return h(
+        'Ubutton',
+        {
+          class: 'bg-green-500 text-white m-0 p-2 rounded border border-green-600 hover:bg-green-600 cursor-pointer px-4',
+          onClick: () => {
+            const id = row.getValue('id')
+
+            console.log(`Export button clicked for ID: ${id}`)
+          }
+        },
+        'add'
       )
     }
   }
