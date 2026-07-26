@@ -26,6 +26,7 @@
     "esbuild@0.28.1": true
   },
   "devDependencies": {
-    "@nuxtjs/supabase": "^2.0.9"
+    "@nuxtjs/supabase": "^2.0.9",
+    "@types/node": "^26.1.1"
   }
 }
