@@ -71,7 +71,7 @@ else {
 
 <template>
   <div class="flex flex-col justify-center top-2/12 items-center h-screen">
-    <UAuthForm title="WELLCOME" ref="authForm" :fields="fields"  class="max-w-md" @submit="authup">
+    <UAuthForm title="WELLCOME" ref="authForm" :fields="fields"  class="max-w-md mx-4" @submit="authup">
       <template #description>
         <p class="my-4"> are you new sign up if not log in and wellcome back </p>
 
