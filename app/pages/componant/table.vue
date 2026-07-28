@@ -1,61 +1,35 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import type { TableMeta, Row } from '@tanstack/vue-table'
-
+import { error, type table } from 'node:console'
+import product from "../insert.vue";
+import { createClient } from '@supabase/supabase-js';
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,
+import.meta.env.VITE_SUPABASE_KEY
+)
 type Payment = {
   id: string
   name: string
   status: 'good' | 'near end' | 'out of stock'
   instock: number
-  amount: number
   minimumAmount: number
 }
+onMounted(async ()=>{
+const {data , error} = await supabase.from("product").select("*");
+dataTest.value = data
+console.log(dataTest.value)
+})
 
+const dataTest = ref()
 
-
-const data = ref<Payment[]>([
-  {
-    id: '4600',
-    name: 'Product A',
-    status: 'good',
-    instock: 10,
-    amount: 594,
-    minimumAmount: 5
-  },
-  {
-    id: '4599',
-    name: 'Product B',
-    status: 'near end',
-    instock: 5,
-    amount: 276,
-    minimumAmount: 10 
-  },
-  {
-    id: '4598',
-    name: 'Product C',
-    status: 'out of stock',
-    instock: 0,
-    amount: 315,
-    minimumAmount: 15
-  },
-  {
-    id: '4597',
-    name: 'Product D',
-    status: 'good',
-    instock: 10,
-    amount: 529,
-    minimumAmount: 5
-  },
-  {
-    id: '4596',
-    name: 'Product E',
-    status: 'good',
-    instock: 5,
-    amount: 639,
-    minimumAmount: 5
+async function deleteItem (pid:any){
+  await useSupabaseClient().from("product").delete().eq("id",pid)
+  if (Error){
+    console.error(Error)
+  }else{console.log("deletion is done")
+   
   }
-])
-
+}
 const columns: TableColumn<Payment>[] = [
   {
     accessorKey: 'id',
@@ -123,8 +97,13 @@ const columns: TableColumn<Payment>[] = [
         {
           class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 cursor-pointer',
           onClick: () => {
+            
             const id = row.getValue('id')
             navigateTo(`/insert`) // Redirect to the update page with the ID
+            product.name = row.getValue('name');
+            product.units = row.getValue('instock');
+            product.minUnits = row.getValue('minimumAmount');
+
           }
         },
         'Update'
@@ -139,10 +118,11 @@ const columns: TableColumn<Payment>[] = [
         'Ubutton',
         {
           class: 'bg-red-500 text-white m-0 p-2 rounded border border-red-600 hover:bg-red-600 cursor-pointer',
-          onClick: () => {
+          onClick: async () => {
             const id = row.getValue('id')
-
             console.log(`Delete button clicked for ID: ${id}`)
+            await deleteItem(id);
+            window.location.reload();
           }
         },
         'Delete'
@@ -157,9 +137,9 @@ const columns: TableColumn<Payment>[] = [
         'Ubutton',
         {
           class: 'bg-green-500 text-white m-0 p-2 rounded border border-green-600 hover:bg-green-600 cursor-pointer px-4',
-          onClick: () => {
+          onClick:async () => {
             const id = row.getValue('id')
-
+            
             console.log(`Export button clicked for ID: ${id}`)
           }
         },
@@ -185,6 +165,6 @@ const meta: TableMeta<Payment> = {
 </script>
 
 <template>
-  <UTable :data="data" :columns="columns" :meta="meta" class="flex-1 ">
+  <UTable :data="dataTest" :columns="columns" :meta="meta" class="flex-1 ">
   </UTable>
 </template>
