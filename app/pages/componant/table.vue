@@ -4,6 +4,9 @@ import type { TableMeta, Row } from '@tanstack/vue-table'
 import { error, type table } from 'node:console'
 import product from "../insert.vue";
 import { createClient } from '@supabase/supabase-js';
+
+let product_id = 0;
+
 const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,
 import.meta.env.VITE_SUPABASE_KEY
 )
@@ -96,13 +99,13 @@ const columns: TableColumn<Payment>[] = [
         'button',
         {
           class: 'bg-blue-500 text-white p-2 rounded hover:bg-blue-600 cursor-pointer',
-          onClick: () => {
+          onClick:async () => {
             
-            const id = row.getValue('id')
-            navigateTo(`/insert`) // Redirect to the update page with the ID
-            product.name = row.getValue('name');
-            product.units = row.getValue('instock');
-            product.minUnits = row.getValue('minimumAmount');
+            product_id = row.getValue('id')
+           await navigateTo({path:`/update`,
+            query:{id:product_id}
+           }) // Redirect to the update page with the ID
+            
 
           }
         },

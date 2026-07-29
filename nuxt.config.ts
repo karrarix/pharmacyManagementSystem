@@ -15,4 +15,9 @@ export default defineNuxtConfig({
       tailwindcss(),
     ]
   },
+  runtimeConfig:{
+    public:{
+      product_id : 8
+    }
+  }
 })

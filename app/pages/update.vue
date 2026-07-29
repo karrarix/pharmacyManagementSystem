@@ -1,10 +1,38 @@
 <script type="js" setup>
 import Navbar from './componant/nevbar.vue';
+import { createClient } from '@supabase/supabase-js';
 import { ref } from 'vue';
-
 const nameinput = ref('');
 const unitinput = ref('');
 const mininput = ref('');
+const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,
+import.meta.env.VITE_SUPABASE_KEY
+)
+const route = useRoute()
+const product_id = route.query.id;
+
+async function changeInput(data) {
+    await (nameinput.value = data[0].name);
+    await (unitinput.value = data[0].instock);
+    await (mininput.value = data[0].minimumAmount);
+        console.log (data)
+}
+
+onMounted(async ()=>{
+    console.log("data", product_id)
+    
+ const {data , error} = await supabase.from("product").select("*").eq("id",product_id)
+
+    if (error){
+        console.error(error)
+    }
+    else{ 
+       
+    await changeInput(data)
+
+}
+})
+
 async function onsubmit() {
 
     console.log(nameinput.value);
@@ -20,16 +48,14 @@ async function onsubmit() {
     else if (unitinput.value <= mininput.value){
         pstutas = "low stock"
     }
-    const error = await useSupabaseClient().from("product").insert([{name:nameinput.value , instock:unitinput.value , minimumAmount:mininput.value, status:pstutas}])
+    const error = await useSupabaseClient().from("product").update([{name:nameinput.value , instock:unitinput.value , minimumAmount:mininput.value, status:pstutas}]).eq("id" ,route.query.id)
     if (error){
         console.error(error);
+        navigateTo("/")
     }
     else{
-        console.log ("insert done");
-        nameinput.value = "";
-        unitinput.value = "";
-        mininput.value = "";
-        window.location.reload();
+        console.log ("update done");
+        navigateTo("/")
     }
 }
 </script>
@@ -44,8 +70,8 @@ async function onsubmit() {
                 <UInput size="xl" v-model="mininput"  variant="soft" color="neutral" placeholder="الحد الادنى"></UInput>
             </div>
             <div class="flex flex-col gap-4 justify-center p-4 m-10 ">
-                <UButton variant="solid" color="primary" class="justify-center" @click="onsubmit">إضافة</UButton>
-                <UButton variant="outline" color="error" class="justify-center"><ULink class="w-full mx-0 px-full" to="/">الرجوج الى السجل</ULink></UButton>
+                <UButton variant="solid" color="primary" class="justify-center" @click="onsubmit">تحديث</UButton>
+                <UButton variant="outline" color="error" class="justify-center"><ULink class="w-full mx-0 px-full" to="/">إلغاء</ULink></UButton>
             </div>
         </div>
     </div>
