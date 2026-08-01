@@ -1,42 +1,50 @@
 <script setup lang="ts">
 import type { TableColumn } from '@nuxt/ui'
 import type { TableMeta, Row } from '@tanstack/vue-table'
-import { error, type table } from 'node:console'
-import product from "../insert.vue";
-import { createClient } from '@supabase/supabase-js';
 
+const route = useRoute();
 let product_id = 0;
+const dataTest = ref();
+const searchQuery = ref(route.query.search || '');
 
-const supabase = createClient(import.meta.env.VITE_SUPABASE_URL,
-import.meta.env.VITE_SUPABASE_KEY
-)
 type Payment = {
   id: string
   name: string
-  status: 'good' | 'near end' | 'out of stock'
+  status: 'جيد' | 'قريب من الانتهاء' | 'منتهي'
   instock: number
   minimumAmount: number
 }
-onMounted(async ()=>{
-const {data , error} = await supabase.from("product").select("*");
-dataTest.value = data
-console.log(dataTest.value)
-})
+// Fetch data from Supabase based on the search query aka the main page functionality
+onMounted(async () => {
 
-const dataTest = ref()
+    const {data , error} = await useSupabaseClient().from("product").select("*").ilike("name", searchQuery.value + "%");
+    dataTest.value = data;
+    error? console.error(error): console.log("data fetched successfully");
+
+  })
+
+
 
 async function deleteItem (pid:any){
-  await useSupabaseClient().from("product").delete().eq("id",pid)
-  if (Error){
-    console.error(Error)
-  }else{console.log("deletion is done")
+  const {error} = await useSupabaseClient().from("product").delete().eq("id",pid)
+  
+  error?console.error(error):console.log("deletion is done")
    
-  }
 }
+
+type data = {
+  id: string
+  name: string
+  instock: number
+}
+
+const data = ref<data[]>([])
+
+
 const columns: TableColumn<Payment>[] = [
   {
     accessorKey: 'id',
-    header: 'ID',
+    header: 'المعرف',
     meta: {
       class: {
         th: 'text-center font-semibold',
@@ -46,11 +54,11 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'اسم المنتج',
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'الحالة',
     meta: {
       class: {
         th: 'text-center',
@@ -60,9 +68,9 @@ const columns: TableColumn<Payment>[] = [
     cell: ({ row }) => {
       const status = row.getValue('status') as string
       const colorMap = {
-        paid: 'text-success',
-        failed: 'text-error',
-        refunded: 'text-warning'
+        'جيد': 'text-success',
+        'قريب من الانتهاء': 'text-warning',
+        'منتهي': 'text-error'
       }
       return h(
         'span',
@@ -73,7 +81,7 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey: 'instock',
-    header: 'In Stock',
+    header: 'عدد الوحدات',
     meta: {
       class: {
         th: 'text-center',
@@ -83,7 +91,7 @@ const columns: TableColumn<Payment>[] = [
   },
   {
     accessorKey:'minimumAmount',
-    header:'Minimum amount',
+    header:'الحد الادنى',
     meta:{
       class:{
         th:'text-center',
@@ -109,13 +117,13 @@ const columns: TableColumn<Payment>[] = [
 
           }
         },
-        'Update'
+        'تعديل'
       )
     }
   },
   {
     accessorKey: 'delete Button',
-    header: '',
+    header: 'الخيارات',
     cell: ({ row }) => {
       return h(
         'Ubutton',
@@ -128,7 +136,7 @@ const columns: TableColumn<Payment>[] = [
             window.location.reload();
           }
         },
-        'Delete'
+        'حذف'
       )
     }
   },
@@ -146,7 +154,7 @@ const columns: TableColumn<Payment>[] = [
             console.log(`Export button clicked for ID: ${id}`)
           }
         },
-        'add'
+        'بيع'
       )
     }
   }
@@ -155,10 +163,10 @@ const columns: TableColumn<Payment>[] = [
 const meta: TableMeta<Payment> = {
   class: {
     tr: (row: Row<Payment>) => {
-      if (row.original.status === 'out of stock') {
+      if (row.original.status === 'منتهي') {
         return 'bg-error/10'
       }
-      if (row.original.status === 'near end') {
+      if (row.original.status === 'قريب من الانتهاء') {
         return 'bg-warning/10'
       }
       return ''

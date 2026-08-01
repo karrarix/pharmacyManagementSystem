@@ -16,7 +16,7 @@ const supabase = createClient(
 
 
 const { data } = useSupabaseClient().auth.onAuthStateChange((event, session) => {
-  console.log(event, session)
+
   if (event === 'INITIAL_SESSION') {
     // handle initial session
   } else if (event === 'SIGNED_IN') {
@@ -39,7 +39,8 @@ const { data } = useSupabaseClient().auth.onAuthStateChange((event, session) => 
 
 
 <template class="h-screen w-screen">
-
+  <UApp>
+    <UColorModeSwitch class="fixed top-4 right-4 z-50" />
   <NuxtPage/>
-
+  </UApp>
 </template>

@@ -19,9 +19,7 @@ async function signUp(payload: FormSubmitEvent<any>){
         console.error(error)
     }
     else{
-    console.log("signup done with :", email, password)
     window.location.href = "/login";
-
     }
 };
 
@@ -29,8 +27,7 @@ async function signUp(payload: FormSubmitEvent<any>){
 
   async function login(payload: FormSubmitEvent<any>) {
   const email = payload.data.email;
-  const password = payload.data.password
-  console.log(email)
+  const password = payload.data.password;
   
   const {error} = await supabase.auth.signInWithPassword({email:email,password:password})
   if (error){
