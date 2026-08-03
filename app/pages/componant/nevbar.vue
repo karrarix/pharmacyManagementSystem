@@ -4,6 +4,12 @@ const route = useRoute()
 const searchQuery = ref('')
 const serchS = useState("searchQuery", () => "");
 
+type BasketItem = {
+  id: string
+  name: string
+  uintsBought: number
+}
+
 watch(searchQuery, (newValue) => {
   // Handle the search query change here
  searchQuery.value = newValue;
@@ -30,7 +36,11 @@ const items = ref<NavigationMenuItem[][]>([
     {
       label: 'بيع المنتجات',
       icon: 'i-lucide-shopping-cart',
-      to: '/export'
+      onClick: () => {
+        const queryb = JSON.stringify((useState<BasketItem[]>('basket').value));
+
+        navigateTo('/export',  queryb);
+      }
     },
     {
       label: 'اضف منتجاتك',

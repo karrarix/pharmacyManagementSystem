@@ -7,6 +7,20 @@ import Table from './componant/table.vue';
         meta: [
           { name: 'description', content: 'Pharmacy management system' }
         ]})
+
+const data = useState('data',() =>{
+  return [
+    { id: '1', name: 'Product 1', instock: 10 },
+    { id: '2', name: 'Product 2', instock: 5 },
+    { id: '3', name: 'Product 3', instock: 0 },
+    { id: '4', name: 'Product 4', instock: 20 },
+    { id: '5', name: 'Product 5', instock: 15 }
+  
+  ]
+})
+data.value.push({ id: '6', name: 'Product 6', instock: 8 })
+console.log(data.value)
+
 </script>
 
 <template>

@@ -23,7 +23,17 @@ onMounted(async () => {
 
   })
 
+type BasketItem = {
+  id: string
+  name: string
+  uintsBought: number
+  instock: number
+}
 
+let unitsBought = 0;
+const basket = useState<BasketItem[]>('basket', () => {
+  return []
+})
 
 async function deleteItem (pid:any){
   const {error} = await useSupabaseClient().from("product").delete().eq("id",pid)
@@ -149,9 +159,21 @@ const columns: TableColumn<Payment>[] = [
         {
           class: 'bg-green-500 text-white m-0 p-2 rounded border border-green-600 hover:bg-green-600 cursor-pointer px-4',
           onClick:async () => {
-            const id = row.getValue('id')
-            
-            console.log(`Export button clicked for ID: ${id}`)
+            const id = row.getValue('id') || 0  as number ;
+            const instock = row.getValue('instock') || 0 as number;
+            if (basket.value.some((item: any) => item.id === id) && basket.value.some((item: any) => item.uintsBought < instock ) ) {
+
+              basket.value.some((item: any) => {
+                if (item.id === id) {
+                  item.uintsBought += 1;
+                }
+              })
+              return
+            }else if (basket.value.some((item:any) => item.id === id && item.uintsBought === instock)){
+              console.log(`Product with ID: ${id} has reached the maximum unitsBought limit.`)
+            }else {
+              basket.value.push({ id: row.getValue('id'), name: row.getValue('name'), uintsBought: 1 , instock: row.getValue('instock')})
+            }
           }
         },
         'بيع'

@@ -45,7 +45,7 @@ async function onsubmit() {
     else if (unitinput.value <= mininput.value){
         pstutas = "قريب من الانتهاء"
     }
-    const error = await useSupabaseClient().from("product").update([{name:nameinput.value , instock:unitinput.value , minimumAmount:mininput.value, status:pstutas}]).eq("id" ,route.query.id)
+    const {error} = await useSupabaseClient().from("product").update([{name:nameinput.value , instock:unitinput.value , minimumAmount:mininput.value, status:pstutas}]).eq("id" ,route.query.id)
     if (error){
         console.error(error);
         navigateTo("/")

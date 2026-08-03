@@ -1,16 +1,37 @@
 
 <script lang="ts" setup>
+import type { Database } from '#build/types/supabase-database.js';
 import Nevbar from './componant/nevbar.vue';
 import type { TableColumn } from '@nuxt/ui'
 const route = useRoute();
-const dataTest = ref();
-type data = {
+const dataTest = useState<BasketItem[]>('basket') || ref<BasketItem[]>([]);
+type BasketItem = {
   id: string
   name: string
+  uintsBought: number
   instock: number
 }
 
-const columns: TableColumn<data>[] = [
+
+
+
+async function bought (){
+
+  for(const item of dataTest.value){
+    const newstock = item.instock - item.uintsBought
+    const {error} = await useSupabaseClient<Database>().from("product")
+      .update([{instock: newstock} as {instock:number}]).eq('id',item.id)
+      error?console.error(`error for product ${item.id} :`,error.message) : console.log("done");
+  }
+
+  navigateTo('/')
+  
+}
+
+
+
+
+const columns: TableColumn<BasketItem>[] = [
   {
     accessorKey: 'id',
     header: 'المعرف',
@@ -26,7 +47,7 @@ const columns: TableColumn<data>[] = [
     header: 'اسم المنتج',
   },
   {
-    accessorKey: 'instock',
+    accessorKey: 'uintsBought',
     header: 'عدد الوحدات',
     meta: {
       class: {
@@ -46,7 +67,7 @@ const columns: TableColumn<data>[] = [
       <UTable :data="dataTest" :columns="columns"  class="flex-1 ">
   </UTable>
         <div class="flex flex-col gap-4 justify-center p-4 m-10 ">
-            <UButton @click="" class="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer mx-0 justify-center">بيع</UButton>
+            <UButton @click="bought()" class="bg-green-500 text-white p-2 rounded hover:bg-green-600 cursor-pointer mx-0 justify-center">بيع</UButton>
             <UButton variant='outline' color='error' @click="navigateTo('/')" class="hover: cursor-pointer w-full mx-0 justify-center">رجوع الى السجل</UButton>
         </div>
    </div>
