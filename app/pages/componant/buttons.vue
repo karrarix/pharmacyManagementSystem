@@ -2,10 +2,22 @@
 async function onClick() {
   return new Promise<void>(res => setTimeout(res, 1000))
 }
+defineProps({
+  label: {
+    type: String,
+    default: 'click me'
+  },
+  color: {
+    type: String,
+    default: 'bg-blue-500'
+  }
+})
 </script>
 
+
+
 <template>
-  <UButton loading-auto @click="onClick" class="bg-blue-500 text-white p-2 rounded">
-    add
+  <UButton loading-auto @click="onClick" :class="['${{color}} text-white p-2 rounded justify-center', color]">
+    <slot>{{ label }}</slot>
   </UButton>
 </template>
